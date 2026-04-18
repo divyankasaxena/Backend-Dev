@@ -1,0 +1,16 @@
+function sanitize(req, res, next) {
+  const clean = (obj) => {
+    for (let key in obj) {
+      if (typeof obj[key] === 'string') {
+        obj[key] = obj[key]
+          .replace(/<.*?>/g, '')     // remove HTML tags
+          .replace(/[$]/g, '');      // basic Mongo operator strip
+      }
+    }
+  };
+
+  if (req.body) clean(req.body);
+  if (req.query) clean(req.query);
+
+  next();
+}
