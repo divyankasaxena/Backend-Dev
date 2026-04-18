@@ -1,0 +1,11 @@
+app.use(express.static('public'));
+app.get('/gallery', (req, res) => {
+  const images = ['img1.jpg', 'img2.jpg', 'img3.jpg'];
+  res.render('gallery', { images });
+});
+<h1>Photo Gallery</h1>
+<div>
+  <% images.forEach(img => { %>
+    <img src="/images/<%= img %>" width="200" />
+  <% }) %>
+</div>
