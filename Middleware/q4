@@ -1,0 +1,16 @@
+const schema = new mongoose.Schema({
+  name: String,
+  deleted: { type: Boolean, default: false }
+});
+
+// Override delete
+schema.methods.softDelete = function() {
+  this.deleted = true;
+  return this.save();
+};
+
+// Auto-filter deleted docs
+schema.pre(/^find/, function(next) {
+  this.where({ deleted: false });
+  next();
+});
