@@ -1,0 +1,27 @@
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+let books = [
+  { id: 1, title: "Node Basics", author: "Amit", year: 2020 },
+  { id: 2, title: "Express Guide", author: "Rahul", year: 2022 },
+  { id: 3, title: "JS Advanced", author: "Sneha", year: 2021 }
+];
+app.get('/books', (req, res) => {
+  let { author, year } = req.query;
+
+  let filtered = books;
+
+  if (author) {
+    filtered = filtered.filter(b =>
+      b.author.toLowerCase().includes(author.toLowerCase())
+    );
+  }
+
+  if (year) {
+    filtered = filtered.filter(b => b.year == Number(year));
+  }
+
+  res.json(filtered);
+});
