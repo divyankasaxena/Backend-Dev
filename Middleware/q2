@@ -1,0 +1,24 @@
+const jwt = require('jsonwebtoken');
+
+function verifyMFA(req, res, next) {
+  const token = req.headers.authorization?.split(' ')[1];
+  const { otp } = req.headers;
+
+  if (!token || !otp) {
+    return res.status(401).json({ error: "Token and OTP required" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, "secret");
+
+    // Example OTP check (replace with DB/cache)
+    if (otp !== "123456") {
+      return res.status(403).json({ error: "Invalid OTP" });
+    }
+
+    req.user = decoded;
+    next();
+  } catch {
+    res.status(401).json({ error: "Invalid token" });
+  }
+}
